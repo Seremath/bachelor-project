@@ -1,0 +1,35 @@
+
+#include <iostream>
+#include <sstream>
+#include <mpi.h>
+#include <sys/time.h>
+
+#include "dedekind/dedekind.h"
+#include "uint128/uint128.h"
+
+using namespace std;
+
+
+struct timeval tim2;
+
+
+typedef Dedekind::UInt128* (*fptr)(size_t, size_t);
+
+template <size_t a = 3>
+fptr findFunction(size_t b)
+{
+	if (a == b)
+	{
+		return Dedekind::monotoneSubsets<a>;
+	}
+	else
+	{
+		return findFunction<a - 1>(b);
+	}
+}
+
+template <>
+fptr findFunction<1>(size_t b)
+{
+	return Dedekind::monotoneSubsets<1>;
+}
